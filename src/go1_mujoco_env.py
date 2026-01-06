@@ -6,6 +6,8 @@ import mujoco
 import numpy as np
 from pathlib import Path
 
+import yaml
+
 
 DEFAULT_CAMERA_CONFIG = {
     "azimuth": 90.0,
@@ -29,9 +31,10 @@ class Go1MujocoEnv(MujocoEnv):
         ],
     }
 
-    def __init__(self, ctrl_type="torque", **kwargs):
+    def __init__(self, **kwargs):
         # model_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/unitree_go1/go1_position.xml")
         model_path = Path(f"/content/RL_DEMO/unitree_go1/scene_position.xml")
+        cfg_path = Path("/content/RL_DEMO/src/envs.yaml")
         MujocoEnv.__init__(
             self,
             model_path=model_path.absolute().as_posix(),
@@ -40,6 +43,9 @@ class Go1MujocoEnv(MujocoEnv):
             default_camera_config=DEFAULT_CAMERA_CONFIG,
             **kwargs,
         )
+
+        with cfg_path.open("r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
 
         # Update metadata to include the render FPS
         self.metadata = {
@@ -56,7 +62,7 @@ class Go1MujocoEnv(MujocoEnv):
 
         # Weights for the reward and cost functions
         self.reward_weights = {
-            "linear_vel_tracking": 2.0,  # Was 1.0
+            "linear_vel_tracking": cfg["reward"]["linear_vel_tracking"],  # Was 1.0
             "angular_vel_tracking": 1.0,
             "healthy": 0.0,  # was 0.05
             "feet_airtime": 1.0,

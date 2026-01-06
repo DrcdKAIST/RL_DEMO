@@ -1,0 +1,20 @@
+# Positive Rewards
+reward:
+  linear_vel_tracking: 2.0
+  angular_vel_tracking: 1.0
+  healthy: 0.0
+  feet_airtime: 1.0
+# Negative Rewards (Penalty)
+cost:
+  torque: 0.0002
+  vertical_vel: 2.0
+  xy_angular_vel: 0.05
+  action_rate: 0.01
+  joint_limit: 10.0
+  joint_velocity: 0.01
+  joint_acceleration: 2.5e-7
+  orientation: 1.0
+  collision: 1.0
+  default_joint_position: 0.1
+curriculum:
+  curriculum_base: 0.3
