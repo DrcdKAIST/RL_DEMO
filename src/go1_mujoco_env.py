@@ -30,7 +30,8 @@ class Go1MujocoEnv(MujocoEnv):
     }
 
     def __init__(self, ctrl_type="torque", **kwargs):
-        model_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/unitree_go1/go1_position.xml")
+        # model_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/unitree_go1/go1_position.xml")
+        model_path = Path(f"/content/RL_DEMO/unitree_go1/scene_position.xml")
         MujocoEnv.__init__(
             self,
             model_path=model_path.absolute().as_posix(),
