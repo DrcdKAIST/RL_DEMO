@@ -32,9 +32,10 @@ class Go1MujocoEnv(MujocoEnv):
     }
 
     def __init__(self, **kwargs):
-        # model_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/unitree_go1/go1_position.xml")
-        model_path = Path(f"/content/RL_DEMO/unitree_go1/scene_position.xml")
-        cfg_path = Path("/content/RL_DEMO/src/envs.yaml")
+        model_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/unitree_go1/scene_position.xml")
+        # model_path = Path(f"/content/RL_DEMO/unitree_go1/scene_position.xml")
+        cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/envs.yaml")
+        # cfg_path = Path("/content/RL_DEMO/src/envs.yaml")
         MujocoEnv.__init__(
             self,
             model_path=model_path.absolute().as_posix(),
@@ -85,12 +86,12 @@ class Go1MujocoEnv(MujocoEnv):
         self._tracking_velocity_sigma = 0.25
 
         # Metrics used to determine if the episode should be terminated
-        self._healthy_z_range = (float(cfg["z_range"][0]),
-                                 float(cfg["z_range"][1]))
-        self._healthy_pitch_range = (np.deg2rad(cfg["pitch_range"][0]),
-                                     np.deg2rad(cfg["pitch_range"][1]))
-        self._healthy_roll_range = (np.deg2rad(cfg["roll_range"][0]),
-                                    np.deg2rad(cfg["roll_range"][1]))
+        self._healthy_z_range = (float(cfg["termination"]["z_range"][0]),
+                                 float(cfg["termination"]["z_range"][1]))
+        self._healthy_pitch_range = (np.deg2rad(cfg["termination"]["pitch_range"][0]),
+                                     np.deg2rad(cfg["termination"]["pitch_range"][1]))
+        self._healthy_roll_range = (np.deg2rad(cfg["termination"]["roll_range"][0]),
+                                    np.deg2rad(cfg["termination"]["roll_range"][1]))
 
         self._feet_air_time = np.zeros(4)
         self._last_contacts = np.zeros(4)
@@ -211,11 +212,6 @@ class Go1MujocoEnv(MujocoEnv):
     def angular_velocity_tracking_reward(self):
         vel_sqr_error = np.square(self._desired_velocity[2] - self.data.qvel[5])
         return np.exp(-vel_sqr_error / self._tracking_velocity_sigma)
-
-    @property
-    def heading_tracking_reward(self):
-        # TODO: qpos[3:7] are the quaternion values
-        pass
 
     @property
     def feet_air_time_reward(self):
