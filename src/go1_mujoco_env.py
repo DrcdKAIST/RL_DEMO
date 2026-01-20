@@ -27,6 +27,14 @@ DEFAULT_CAMERA_CONFIG = {
 class Go1MujocoEnv(MujocoEnv):
     """Custom Environment that follows gym interface."""
 
+    metadata = {
+        "render_modes": [
+            "human",
+            "rgb_array",
+            "depth_array",
+        ],
+    }
+
     def __init__(self, prj_path, **kwargs):
         model_path = Path(f"{prj_path}/unitree_go1/scene_position.xml")
         cfg_path = Path(f"{prj_path}/src/envs.yaml")
@@ -44,6 +52,7 @@ class Go1MujocoEnv(MujocoEnv):
 
         # Update metadata to include the render FPS
         self.metadata = {
+            "render_modes": ["human", "rgb_array", "depth_array"],
             "render_fps": cfg["render"]["render_fps"],
         }
         self._last_render_time = -1.0
