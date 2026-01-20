@@ -11,7 +11,7 @@ MODEL_DIR = "models"
 LOG_DIR = "logs"
 
 def test():
-    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/src/models/pretrained/final_model.zip"
+    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-14_15-23-25/model_48000_steps.zip"
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/params.yaml")
@@ -20,6 +20,7 @@ def test():
         cfg = yaml.safe_load(f)
 
     env = Go1MujocoEnv(
+        prj_path="/home/kyu/Desktop/workspace/RL_DEMO",
         render_mode="human",
         camera_name="tracking",
         width=1920,

@@ -28,7 +28,7 @@ def train():
 
     vec_env = make_vec_env(
         Go1MujocoEnv,
-        env_kwargs={},
+        env_kwargs={"prj_path": "/home/kyu/Desktop/workspace/RL_DEMO"},
         n_envs=cfg["n_envs"],
         seed=cfg["seed"],
         vec_env_cls=SubprocVecEnv,
