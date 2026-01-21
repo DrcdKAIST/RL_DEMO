@@ -4,13 +4,12 @@ from pathlib import Path
 
 from stable_baselines3 import PPO
 from go1_mujoco_env import Go1MujocoEnv
-from tqdm import tqdm
 
 MODEL_DIR = "models"
 LOG_DIR = "logs"
 
 def test():
-    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-21_03-02-18/best_model.zip"
+    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-21_16-34-00/best_model.zip"
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/params.yaml")
@@ -28,10 +27,10 @@ def test():
 
     model = PPO.load(path=model_path, env=env, verbose=1)
 
-    num_episodes = cfg["test"]["num_test_episodes"]
+    max_time_step_s = cfg["test"]["max_time_step_s"]
     total_reward = 0
     total_length = 0
-    for _ in tqdm(range(num_episodes)):
+    if total_length < int(max_time_step_s * 500):
         obs, _ = env.reset()
         env.render()
 
@@ -53,9 +52,6 @@ def test():
         total_length += ep_len
         total_reward += ep_reward
 
-    print(
-        f"Avg episode reward: {total_reward / num_episodes}, avg episode length: {total_length / num_episodes}"
-    )
 
 
 if __name__ == "__main__":
