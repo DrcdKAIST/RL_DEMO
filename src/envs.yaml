@@ -1,13 +1,13 @@
 # Positive Rewards
 reward:
-  linear_vel_tracking: 2.0
+  linear_vel_tracking: 1.0
   angular_vel_tracking: 1.0
-  healthy: 0.0
+  healthy: 0.005
   feet_air_time: 1.0
 # Negative Rewards (Penalty)
 cost:
   torque: 0.0002
-  vertical_vel: 2.0
+  vertical_vel: 1.0
   xy_angular_vel: 0.05
   action_rate: 0.01
   joint_limit: 10.0

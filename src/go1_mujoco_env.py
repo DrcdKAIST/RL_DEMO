@@ -38,6 +38,10 @@ class Go1MujocoEnv(MujocoEnv):
     def __init__(self, prj_path, **kwargs):
         model_path = Path(f"{prj_path}/unitree_go1/scene_position.xml")
         cfg_path = Path(f"{prj_path}/src/envs.yaml")
+
+        with cfg_path.open("r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+
         MujocoEnv.__init__(
             self,
             model_path=model_path.absolute().as_posix(),
@@ -46,9 +50,6 @@ class Go1MujocoEnv(MujocoEnv):
             default_camera_config=DEFAULT_CAMERA_CONFIG,
             **kwargs,
         )
-
-        with cfg_path.open("r", encoding="utf-8") as f:
-            cfg = yaml.safe_load(f)
 
         # Update metadata to include the render FPS
         self.metadata = {

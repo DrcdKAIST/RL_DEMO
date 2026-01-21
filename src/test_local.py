@@ -2,7 +2,6 @@ import time
 import yaml
 from pathlib import Path
 
-import gymnasium as gym
 from stable_baselines3 import PPO
 from go1_mujoco_env import Go1MujocoEnv
 from tqdm import tqdm
@@ -11,7 +10,7 @@ MODEL_DIR = "models"
 LOG_DIR = "logs"
 
 def test():
-    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-14_15-23-25/model_48000_steps.zip"
+    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-21_03-02-18/best_model.zip"
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/params.yaml")
