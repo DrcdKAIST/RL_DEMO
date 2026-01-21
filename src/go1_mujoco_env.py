@@ -104,7 +104,7 @@ class Go1MujocoEnv(MujocoEnv):
 
         self._clip_obs_threshold = 100.0
         self.observation_space = spaces.Box(
-            low=-np.inf, high=np.inf, shape=self._get_obs().shape, dtype=np.float64
+            low=-np.inf, high=np.inf, shape=self._get_obs().shape, dtype=np.float32
         )
 
         # Feet site names to index mapping
@@ -133,7 +133,7 @@ class Go1MujocoEnv(MujocoEnv):
         reward, reward_info = self._get_reward(action)
         terminated = not self.is_healthy
         truncated = self._step >= (self._max_episode_time_sec / self.dt)
-        info = {
+        infos = {
             "x_position": self.data.qpos[0],
             "y_position": self.data.qpos[1],
             "distance_from_origin": np.linalg.norm(self.data.qpos[0:2], ord=2),
@@ -148,7 +148,7 @@ class Go1MujocoEnv(MujocoEnv):
 
         self._last_action = action
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, terminated, truncated, infos
 
     @property
     def is_healthy(self):
@@ -209,12 +209,19 @@ class Go1MujocoEnv(MujocoEnv):
             joint_acc_cost,
         ])
 
-        reward = max(0.0, rewards - costs)
+        reward = rewards - costs
 
         reward_info = {
-            "linear_vel_tracking_reward": linear_vel_tracking_reward,
-            "reward_ctrl": -ctrl_cost,
-            "reward_survive": healthy_reward,
+            "reward/lin_vel": linear_vel_tracking_reward,
+            "reward/ang_vel": angular_vel_tracking_reward,
+            "reward/feet_air_time": feet_air_time_reward,
+            "reward/healthy": healthy_reward,
+            "cost/torque": ctrl_cost,
+            "cost/action_rate": action_rate_cost,
+            "cost/vertical_vel": vertical_vel_cost,
+            "cost/xy_angular_vel": xy_angular_vel_cost,
+            "cost/joint_lim": joint_limit_cost,
+            "cost/joint_acc": joint_acc_cost
         }
 
         return reward, reward_info

@@ -45,7 +45,7 @@ class RewardCalculator:
         # if feet_air_time is > 0 (feet was in the air) and contact_filter detects a contact with the ground
         # then it is the first contact of this stride
         first_contact = (self._feet_air_time > 0.0) * contact_filter
-        self._feet_air_time += dt
+        # self._feet_air_time += dt * (~curr_contact)
 
         # Award the feets that have just finished their stride (first step with contact)
         air_time_reward = np.sum((self._feet_air_time - 1.0) * first_contact)

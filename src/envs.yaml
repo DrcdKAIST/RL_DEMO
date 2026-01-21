@@ -22,7 +22,7 @@ curriculum:
 command:
   tracking_velocity_sigma: 0.25
   des_vel:
-    min: [0.5, 0.0, 0.0]
+    min: [0.3, 0.0, 0.0]
     max: [0.5, 0.0, 0.0]
 # Observation
 observation:

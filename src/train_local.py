@@ -7,6 +7,8 @@ from stable_baselines3.common.env_util import make_vec_env
 from go1_mujoco_env import Go1MujocoEnv
 from pathlib import Path
 
+from utils.reward_logging_callback import RewardLoggingCallback
+
 import yaml
 
 def train():
@@ -62,9 +64,12 @@ def train():
         render=False,
     )
 
+    reward_logging_callback = RewardLoggingCallback()
+
     callbacks = CallbackList([
         eval_callback,
         checkpoint_callback,
+        reward_logging_callback,
     ])
 
     if pretrained_model_path is not None:
