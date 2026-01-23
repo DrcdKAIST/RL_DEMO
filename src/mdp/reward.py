@@ -57,7 +57,20 @@ class RewardCalculator:
 
         return self.reward_weights["feet_air_time"] * air_time_reward
 
-    # Cost Methods Defined
+    ### Add your own reward ###
+    def base_height(self, robot_height, ref_height):
+        """
+        Design a reward that keeps the robot's base height close to z_ref.
+
+        Hints:
+        - Try L2 penalty:        -(robot_height - ref_height)^2
+        - Try exponential form: exp(-(robot_height - ref_height)^2 / sigma)
+        - Think about tolerance vs strictness
+        """
+        base_height_reward = 0.0  # TODO: implement your reward here
+        return self.reward_weights["base_height"] * base_height_reward
+
+    # Cost(Negative Rewards) Methods Defined
     def torque_cost(self, torques):
         return self.cost_weights["torque"] * np.sum(np.square(torques))
 

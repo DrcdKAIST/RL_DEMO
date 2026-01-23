@@ -183,12 +183,14 @@ class Go1MujocoEnv(MujocoEnv):
         linear_vel_tracking_reward = self.reward_calculator.linear_velocity(desired=self._desired_velocity[:2], current=state.base_lin_vel[:2])
         angular_vel_tracking_reward = self.reward_calculator.angular_velocity(desired=self._desired_velocity[2], current=state.base_ang_vel[2])
         healthy_reward = self.reward_calculator.healthy(is_healthy=self.is_healthy)
+        base_height_reward = self.reward_calculator.base_height(robot_height=state.base_pos[2], ref_height=0.3)
         feet_air_time_reward = self.reward_calculator.feet_air_time(feet_contact_forces=self.feet_contact_forces, dt=self.dt, desired=self._desired_velocity[:2])
 
         rewards = sum([
             linear_vel_tracking_reward,
             angular_vel_tracking_reward,
             healthy_reward,
+            base_height_reward,
             feet_air_time_reward,
         ])
 
@@ -215,6 +217,7 @@ class Go1MujocoEnv(MujocoEnv):
             "reward/lin_vel": linear_vel_tracking_reward,
             "reward/ang_vel": angular_vel_tracking_reward,
             "reward/feet_air_time": feet_air_time_reward,
+            "reward/base_height_reward": base_height_reward,
             "reward/healthy": healthy_reward,
             "cost/torque": ctrl_cost,
             "cost/action_rate": action_rate_cost,

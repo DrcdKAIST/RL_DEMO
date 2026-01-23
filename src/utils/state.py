@@ -3,6 +3,14 @@ class Go1State:
         self.data = data
 
     @property
+    def base_pos(self):
+        return self.data.qpos[:3]
+
+    @property
+    def base_rot(self):
+        return self.data.qpos[3:7]
+
+    @property
     def base_lin_vel(self):
         return self.data.qvel[:3]
 
