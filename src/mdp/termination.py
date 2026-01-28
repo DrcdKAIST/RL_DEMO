@@ -1,4 +1,5 @@
 import numpy as np
+from src.utils import math_utils
 
 
 class TerminationChecker:
@@ -11,9 +12,14 @@ class TerminationChecker:
         self.pitch_max = np.deg2rad(cfg["pitch_range"][1])
 
     def is_healthy(self, state):
+        # state[3:7] is quaternion (w, x, y, z)
+        # Convert to euler angles (roll, pitch, yaw)
+        w, x, y, z = state[3:7]
+        roll, pitch, yaw = math_utils.euler_from_quaternion(w, x, y, z)
+
         return (
             np.isfinite(state).all()
             and self.z_min <= state[2] <= self.z_max
-            and self.roll_min <= state[4] <= self.roll_max
-            and self.pitch_min <= state[5] <= self.pitch_max
+            and self.roll_min <= roll <= self.roll_max
+            and self.pitch_min <= pitch <= self.pitch_max
         )

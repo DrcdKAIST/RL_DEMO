@@ -2,6 +2,11 @@ import time
 import yaml
 from pathlib import Path
 
+import mujoco
+
+if not hasattr(mujoco.MjData, 'solver_iter'):
+    setattr(mujoco.MjData, 'solver_iter', property(lambda self: self.solver_niter))
+
 from stable_baselines3 import PPO
 from go1_mujoco_env import Go1MujocoEnv
 
@@ -9,16 +14,18 @@ MODEL_DIR = "models"
 LOG_DIR = "logs"
 
 def test():
-    model_path = "/home/kyu/Desktop/workspace/RL_DEMO/models/2026-01-21_16-34-00/best_model.zip"
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained/best_model.zip"
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_16-32-54/best_model.zip"
+    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_20-24-57/best_model.zip"
     model_path = Path(model_path)
 
-    cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/params.yaml")
+    cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
 
     with cfg_path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
     env = Go1MujocoEnv(
-        prj_path="/home/kyu/Desktop/workspace/RL_DEMO",
+        prj_path="/home/kdyun/Desktop/RL_DEMO",
         render_mode="human",
         camera_name="tracking",
         width=1920,
@@ -43,7 +50,7 @@ def test():
             ep_len += 1
 
             # Slow down the rendering
-            time.sleep(0.1)
+            time.sleep(0.02)
 
             if terminated or truncated:
                 print(f"{ep_len=}  {ep_reward=}")

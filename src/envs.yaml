@@ -2,17 +2,18 @@
 reward:
   linear_vel_tracking: 1.0
   angular_vel_tracking: 1.0
-  healthy: 0.005
+  healthy: 0.01
   base_height: 0.0 # TODO: Modify your reward weight here!
   feet_air_time: 1.0
 # Negative Rewards (Penalty)
 cost:
-  torque: 0.0002
+  torque: 0.002
   vertical_vel: 1.0
   xy_angular_vel: 0.05
   action_rate: 0.01
   joint_limit: 10.0
   joint_acc: 2.5e-7
+  action_norm: 0.01  # Penalize deviation from nominal pose
 # Environment
 env:
   max_episode_length_s: 15.0
@@ -33,8 +34,8 @@ observation:
   dofs_velocity: 0.05
 # Termination
 termination:
-  z_range: [0.22, 0.65] # In m
-  pitch_range: [-10, 10] # In degree
-  roll_range: [-10, 10] # In degree
+  z_range: [0.20, 0.55] # In m
+  pitch_range: [-15, 15] # In degree
+  roll_range: [-15, 15] # In degree
 render:
   render_fps: 60

@@ -45,10 +45,10 @@ class RewardCalculator:
         # if feet_air_time is > 0 (feet was in the air) and contact_filter detects a contact with the ground
         # then it is the first contact of this stride
         first_contact = (self._feet_air_time > 0.0) * contact_filter
-        # self._feet_air_time += dt * (~curr_contact)
+        self._feet_air_time += dt * (~curr_contact)
 
         # Award the feets that have just finished their stride (first step with contact)
-        air_time_reward = np.sum((self._feet_air_time - 1.0) * first_contact)
+        air_time_reward = np.sum((self._feet_air_time - 0.5) * first_contact)
         # No award if the desired velocity is very low (i.e. robot should remain stationary and feet shouldn't move)
         air_time_reward *= np.linalg.norm(desired) > 0.1
 
@@ -92,4 +92,8 @@ class RewardCalculator:
 
     def joint_acc_limit(self, qacc):
         return self.cost_weights["joint_acc"] * np.sum(np.square(qacc))
+
+    def action_norm(self, action):
+        """Penalize action magnitude (deviation from nominal pose)"""
+        return self.cost_weights["action_norm"] * np.sum(np.square(action))
 

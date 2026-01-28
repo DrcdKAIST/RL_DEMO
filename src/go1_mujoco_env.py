@@ -66,7 +66,7 @@ class Go1MujocoEnv(MujocoEnv):
         self._curriculum_base = cfg["curriculum"]["base"]
         self._gravity_vector = np.array(self.model.opt.gravity)
         self._default_joint_position = np.array(self.model.key_ctrl[0])
-
+        # print("self._default_joint_position   " ,self._default_joint_position )
         # vx (m/s), vy (m/s), wz (rad/s)
         self._desired_velocity_min = np.array(cfg["command"]["des_vel"]["min"])
         self._desired_velocity_max = np.array(cfg["command"]["des_vel"]["max"])
@@ -125,9 +125,33 @@ class Go1MujocoEnv(MujocoEnv):
             self.model, mujoco.mjtObj.mjOBJ_BODY.value, "trunk"
         )
 
+        # Re-initialize action space now that _default_joint_position is defined
+        self._set_action_space()
+
+    def _set_action_space(self):
+        """Override parent's action space to use relative joint offsets instead of absolute positions."""
+        # Action space is now relative offsets from nominal pose
+        bounds = self.model.actuator_ctrlrange.copy().astype(np.float32)
+        low, high = bounds.T
+
+        # Get default joint position (nominal pose)
+        default_pos = self.model.key_ctrl[0].copy().astype(np.float32)
+
+        # Action space: relative offsets from nominal pose
+        self.action_space = spaces.Box(
+            low=low - default_pos,
+            high=high - default_pos,
+            dtype=np.float32
+        )
+        return self.action_space
+
     def step(self, action):
         self._step += 1
-        self.do_simulation(action, self.frame_skip)
+        # Convert relative action (from nominal pose) to absolute joint position
+        absolute_action = action + self._default_joint_position
+        # print("absolute_action   " ,absolute_action )
+
+        self.do_simulation(absolute_action, self.frame_skip)
 
         observation = self._get_obs()
         reward, reward_info = self._get_reward(action)
@@ -201,6 +225,7 @@ class Go1MujocoEnv(MujocoEnv):
         xy_angular_vel_cost = self.reward_calculator.xy_angular_velocity(ang_vel=state.base_ang_vel[:2])
         joint_limit_cost = self.reward_calculator.joint_limit(soft_joint_range=self._soft_joint_range, jpos=state.joint_pos)
         joint_acc_cost = self.reward_calculator.joint_acc_limit(qacc=state.joint_acc)
+        action_norm_cost = self.reward_calculator.action_norm(action=action)
 
         costs = sum([
             ctrl_cost,
@@ -209,11 +234,15 @@ class Go1MujocoEnv(MujocoEnv):
             xy_angular_vel_cost,
             joint_limit_cost,
             joint_acc_cost,
+            action_norm_cost,
         ])
 
         reward = rewards - costs
 
         reward_info = {
+            "reward/total": reward,
+            "reward/total_rewards": rewards,
+            "reward/total_costs": costs,
             "reward/lin_vel": linear_vel_tracking_reward,
             "reward/ang_vel": angular_vel_tracking_reward,
             "reward/feet_air_time": feet_air_time_reward,
@@ -224,7 +253,8 @@ class Go1MujocoEnv(MujocoEnv):
             "cost/vertical_vel": vertical_vel_cost,
             "cost/xy_angular_vel": xy_angular_vel_cost,
             "cost/joint_lim": joint_limit_cost,
-            "cost/joint_acc": joint_acc_cost
+            "cost/joint_acc": joint_acc_cost,
+            "cost/action_norm": action_norm_cost
         }
 
         return reward, reward_info

@@ -18,7 +18,7 @@ def train():
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(LOG_DIR, exist_ok=True)
 
-    cfg_path = Path(f"/home/kyu/Desktop/workspace/RL_DEMO/src/params.yaml")
+    cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
 
     with cfg_path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
@@ -30,7 +30,7 @@ def train():
 
     vec_env = make_vec_env(
         Go1MujocoEnv,
-        env_kwargs={"prj_path": "/home/kyu/Desktop/workspace/RL_DEMO"},
+        env_kwargs={"prj_path": "/home/kdyun/Desktop/RL_DEMO"},
         n_envs=cfg["n_envs"],
         seed=cfg["seed"],
         vec_env_cls=SubprocVecEnv,
