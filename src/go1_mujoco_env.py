@@ -157,6 +157,14 @@ class Go1MujocoEnv(MujocoEnv):
         reward, reward_info = self._get_reward(action)
         terminated = not self.is_healthy
         truncated = self._step >= (self._max_episode_time_sec / self.dt)
+
+        # Add termination penalty if robot falls
+        if terminated:
+            reward -= 100.0  # Large penalty for falling
+            reward_info["cost/termination"] = 100.0
+        else:
+            reward_info["cost/termination"] = 0.0
+
         infos = {
             "x_position": self.data.qpos[0],
             "y_position": self.data.qpos[1],

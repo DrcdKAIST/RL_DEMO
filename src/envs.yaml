@@ -13,7 +13,7 @@ cost:
   action_rate: 0.01
   joint_limit: 10.0
   joint_acc: 2.5e-7
-  action_norm: 0.01  # Penalize deviation from nominal pose
+  action_norm: 0.005  # Penalize deviation from nominal pose
 # Environment
 env:
   max_episode_length_s: 15.0

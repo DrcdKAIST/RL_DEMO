@@ -97,3 +97,11 @@ class RewardCalculator:
         """Penalize action magnitude (deviation from nominal pose)"""
         return self.cost_weights["action_norm"] * np.sum(np.square(action))
 
+    def joint_pos_deviation(self, jpos, nominal_jpos):
+        """Penalize actual joint position deviation from nominal pose"""
+        return self.cost_weights["joint_pos_deviation"] * np.sum(np.square(jpos - nominal_jpos))
+
+    def termination(self, is_terminated):
+        """Large penalty for falling/termination"""
+        return self.cost_weights["termination"] * float(is_terminated)
+

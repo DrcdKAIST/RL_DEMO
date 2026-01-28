@@ -15,8 +15,7 @@ LOG_DIR = "logs"
 
 def test():
     # model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_16-32-54/best_model.zip"
-    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_20-24-57/best_model.zip"
+    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_20-59-34/best_model.zip"
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
