@@ -15,13 +15,11 @@ LOG_DIR = "logs"
 
 def test():
     # model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_20-59-34/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_21-29-16/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_21-52-50/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-09-06/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-18-10/best_model.zip"
-    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-37-48/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-58-40/best_model.zip"
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-37-48/best_model.zip" # SOTA
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_00-43-24/best_model.zip" # reproduce
+    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_00-43-53/best_model.zip" # remove healthy reward, Good!
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_01-50-47/best_model.zip" # remove action norm reward
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_01-53-06/best_model.zip" # increase joint pos reward
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
@@ -30,7 +28,7 @@ def test():
         cfg = yaml.safe_load(f)
 
     # Set a fixed command for testing [vx (m/s), vy (m/s), wz (rad/s)]
-    given_command = [0.7, 0.0, 0.0]
+    given_command = [0.9, 0.0, 0.0]
 
     env = Go1MujocoEnv(
         prj_path="/home/kdyun/Desktop/RL_DEMO",
