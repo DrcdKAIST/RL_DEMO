@@ -163,18 +163,21 @@ class RewardCalculator:
         Returns:
             Cost (penalty) for insufficient clearance
         """
-        desired_foot_clearance = 0.1 
+        desired_foot_clearance = 0.08
+        foot_clearance_vals = np.zeros(4)
+        for i in range(4):
+            # Only enforce clearance during swing phase (phase < -0.6)
+            if foot_contact_phase[i] < -0.6:
+                foot_clearance_vals[i] = foot_positions[i] - desired_foot_clearance
+            else:
+                foot_clearance_vals[i] = 0.0  # Max reward (not enforcing)
+        # print(foot_clearance_vals)
 
         # ===== Option 1: Quadratic penalty (currently used) =====
         # Penalize deviation from desired clearance during swing phase
         penalty = 0.0
         for i in range(4):
-            # Only enforce clearance during swing phase (phase < -0.6)
-            if foot_contact_phase[i] < -0.6:
-                # Penalize when foot is below desired clearance
-                clearance_error = foot_positions[i] - desired_foot_clearance
-                if clearance_error < 0:  # Below desired height
-                    penalty += clearance_error ** 2
+            penalty += foot_clearance_vals[i] ** 2
 
         return self.cost_weights["foot_clearance"] * penalty
 
@@ -182,15 +185,6 @@ class RewardCalculator:
         # limit_lower = -0.08
         # limit_upper = 1.0
         # delta = 0.02
-        #
-        # foot_clearance_vals = np.zeros(4)
-        # for i in range(4):
-        #     # Only enforce clearance during swing phase (phase < -0.6)
-        #     if foot_contact_phase[i] < -0.6:
-        #         foot_clearance_vals[i] = foot_positions[i] - desired_foot_clearance
-        #     else:
-        #         foot_clearance_vals[i] = 0.0  # Max reward (not enforcing)
-        #
         # barrier_reward = 0.0
         # for i in range(4):
         #     barrier_reward += self._relaxed_log_barrier(

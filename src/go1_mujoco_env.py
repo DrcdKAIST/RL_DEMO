@@ -107,7 +107,7 @@ class Go1MujocoEnv(MujocoEnv):
 
         # Gait phase tracking
         self._phase = 0.0
-        self._gait_hz = 1  # Gait frequency (Hz)
+        self._gait_hz = 0.5  # Gait frequency (Hz)
         self._phase_sin = np.zeros(2)  # [sin(phase), cos(phase)]
 
         # Foot contact phase for gait enforcement
@@ -392,10 +392,11 @@ class Go1MujocoEnv(MujocoEnv):
         # We need to map: FR(0), FL(1), RR(2), RL(3)
 
         base_phase = np.sin(phase_val)
+        self._foot_contact_phase[0] = -base_phase     # FR
+        self._foot_contact_phase[1] = base_phase      # FL
         self._foot_contact_phase[2] = base_phase      # RR
-        self._foot_contact_phase[3] = -base_phase     # RL (opposite)
-        self._foot_contact_phase[0] = -base_phase     # FR (opposite)
-        self._foot_contact_phase[1] = base_phase      # FL (same as RR)
+        self._foot_contact_phase[3] = -base_phase     # RL
+
 
     def _sample_desired_vel(self):
         # If given_command is provided, use it instead of random sampling

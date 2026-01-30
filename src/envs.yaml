@@ -7,16 +7,16 @@ reward:
   feet_air_time: 0.0
 # Negative Rewards (Penalty)
 cost:
-  torque: 0.002
+  torque: 0.001
   vertical_vel: 1.0
-  xy_angular_vel: 0.05
+  xy_angular_vel: 0.2
   action_rate: 0.01
   joint_limit: 10.0
   joint_acc: 2.5e-7
   action_norm: 0.005  # Penalize action norm magnitude
   joint_pos_deviation: 0.05  # Penalize joint position deviation from nominal pose
-  gait_enforcement: 0.01  # Enforce trot gait pattern
-  foot_clearance: 0.01  # Enforce foot clearance during swing phase
+  gait_enforcement: 0.05  # Enforce trot gait pattern
+  foot_clearance: 50  # Enforce foot clearance during swing phase
 # Environment
 env:
   max_episode_length_s: 15.0

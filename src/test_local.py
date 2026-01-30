@@ -18,11 +18,8 @@ def test():
     # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-28_23-37-48/best_model.zip" # SOTA
     # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_00-43-24/best_model.zip" # reproduce
     # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-29_00-43-53/best_model.zip" # remove healthy reward, Good!
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_16-40-41/best_model.zip" # feet_air_time + phase based clearance
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_17-00-42/best_model.zip" # only phase based clearance
-    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_17-24-39/best_model.zip" # only phase based clearance tuned
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_17-42-15/best_model.zip" # gait_enforcement quadratic
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_17-42-15/best_model.zip" # gait_enforcement quadratic
+    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_19-46-51/best_model.zip" #
+    model_path = "/home/kdyun/Desktop/RL_DEMO/models/2026-01-30_20-23-08/best_model.zip" #
     model_path = Path(model_path)
 
     cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
