@@ -3,7 +3,7 @@ reward:
   linear_vel_tracking: 1.5
   angular_vel_tracking: 1.0
   healthy: 0.00
-  base_height: 0.0 # TODO: Modify your reward weight here!
+  base_height: 0.0
   feet_air_time: 0.0
 # Negative Rewards (Penalty)
 cost:

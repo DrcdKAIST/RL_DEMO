@@ -120,7 +120,6 @@ class RewardCalculator:
         # Compute actual contact state (binary)
         curr_contact = foot_contact_forces > 1.0  # [FR, FL, RR, RL]
 
-        # Compute foot_contact_double as in RaiSim
         # If in contact: positive phase value, if in air: negative phase value
         foot_contact_double = np.zeros(4)
         for i in range(4):
@@ -129,11 +128,11 @@ class RewardCalculator:
             else:
                 foot_contact_double[i] = -1.0 * foot_contact_phase[i]
 
-        # ===== Option 1: Quadratic penalty (currently used) =====
+        # ===== Option 1: Quadratic penalty =====
         penalty = np.sum((foot_contact_double - 1.0) ** 2)
         return self.cost_weights["gait_enforcement"] * penalty
 
-        # ===== Option 2: Relaxed log barrier (original RaiSim) =====
+        # ===== Option 2: Relaxed log barrier  =====
         # # Apply relaxed log barrier to keep values in range [-0.6, 2.0]
         # limit_lower = -0.6
         # limit_upper = 2.0
@@ -145,7 +144,7 @@ class RewardCalculator:
         #         delta, limit_lower, limit_upper, foot_contact_double[i]
         #     )
         #
-        # # Clip to prevent extreme gradients (as in RaiSim line 442-448)
+        # # Clip to prevent extreme gradients
         # barrier_reward = max(barrier_reward, -300.0)
         #
         # # Return as cost (negative reward)
@@ -173,7 +172,7 @@ class RewardCalculator:
                 foot_clearance_vals[i] = 0.0  # Max reward (not enforcing)
         # print(foot_clearance_vals)
 
-        # ===== Option 1: Quadratic penalty (currently used) =====
+        # ===== Option 1: Quadratic penalty =====
         # Penalize deviation from desired clearance during swing phase
         penalty = 0.0
         for i in range(4):
@@ -181,7 +180,7 @@ class RewardCalculator:
 
         return self.cost_weights["foot_clearance"] * penalty
 
-        # ===== Option 2: Relaxed log barrier (original RaiSim) =====
+        # ===== Option 2: Relaxed log barrier =====
         # limit_lower = -0.08
         # limit_upper = 1.0
         # delta = 0.02
@@ -191,7 +190,7 @@ class RewardCalculator:
         #         delta, limit_lower, limit_upper, foot_clearance_vals[i]
         #     )
         #
-        # # Clip to prevent extreme gradients (as in RaiSim)
+        # # Clip to prevent extreme gradients
         # barrier_reward = max(barrier_reward, -300.0)
         #
         # # Return as cost (negative reward)
@@ -200,7 +199,7 @@ class RewardCalculator:
     @staticmethod
     def _relaxed_log_barrier(delta, alpha_lower, alpha_upper, x):
         """
-        Relaxed log barrier function as in RaiSim.
+        Relaxed log barrier function
         Returns positive reward when x is within bounds, negative outside.
 
         Args:
