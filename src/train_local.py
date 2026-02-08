@@ -12,25 +12,26 @@ from utils.reward_logging_callback import RewardLoggingCallback
 import yaml
 
 def train():
-    MODEL_DIR = "models"
-    LOG_DIR = "logs"
+    base_dir = Path(__file__).resolve().parents[1]
+    model_dir = base_dir / "models"
+    log_dir = base_dir / "logs"
 
-    os.makedirs(MODEL_DIR, exist_ok=True)
-    os.makedirs(LOG_DIR, exist_ok=True)
+    model_dir.mkdir(parents=True, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
 
-    cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
+    cfg_path = base_dir / "src" / "params.yaml"
 
     with cfg_path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
     if cfg["policy"]["use_pretrained"]:
-        pretrained_model_path = ""
+        pretrained_model_path = base_dir / "models" / "pretrained" / "best_model.zip"
     else:
         pretrained_model_path = None
 
     vec_env = make_vec_env(
         Go1MujocoEnv,
-        env_kwargs={"prj_path": "/home/kdyun/Desktop/RL_DEMO"},
+        env_kwargs={"prj_path": base_dir.as_posix()},
         n_envs=cfg["n_envs"],
         seed=cfg["seed"],
         vec_env_cls=SubprocVecEnv,
@@ -39,7 +40,7 @@ def train():
     train_time = time.strftime("%Y-%m-%d_%H-%M-%S")
     run_name = f"{train_time}"
 
-    model_path = f"{MODEL_DIR}/{run_name}"
+    model_path = model_dir / run_name
     print(
         f"Training on {cfg['n_envs']} parallel training environments and saving models to '{model_path}'"
     )
@@ -57,7 +58,7 @@ def train():
     eval_callback = EvalCallback(
         vec_env,
         best_model_save_path=model_path,
-        log_path=LOG_DIR,
+        log_path=log_dir,
         eval_freq=cfg["eval_freq"],
         n_eval_episodes=5,
         deterministic=True,
@@ -89,7 +90,7 @@ def train():
             vf_coef=cfg["policy"]["vf_coef"],
             max_grad_norm=cfg["policy"]["max_grad_norm"],
             verbose=1,
-            tensorboard_log=LOG_DIR
+            tensorboard_log=log_dir
         )
     else:
         # Default PPO model hyper-parameters give good results
@@ -107,7 +108,7 @@ def train():
                     vf_coef=cfg["policy"]["vf_coef"],
                     max_grad_norm=cfg["policy"]["max_grad_norm"],
                     verbose=1,
-                    tensorboard_log=LOG_DIR)
+                    tensorboard_log=log_dir)
 
     model.learn(
         total_timesteps=cfg["total_timestep"],
@@ -117,7 +118,7 @@ def train():
         callback=callbacks,
     )
     # Save final model
-    model.save(f"{model_path}/final_model")
+    model.save(model_path / "final_model")
 
 
 if __name__ == "__main__":

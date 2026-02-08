@@ -14,12 +14,13 @@ MODEL_DIR = "models"
 LOG_DIR = "logs"
 
 def test():
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained/best_model.zip"
-    model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained2/best_model.zip"
-    # model_path = "/home/kdyun/Desktop/RL_DEMO/models/pretrained3/best_model.zip"
+
+    base_dir = Path(__file__).resolve().parents[1]
+
+    model_path = f"{base_dir}/models/pretrained/best_model.zip"
     model_path = Path(model_path)
 
-    cfg_path = Path(f"/home/kdyun/Desktop/RL_DEMO/src/params.yaml")
+    cfg_path = base_dir / "src" / "params.yaml"
 
     with cfg_path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
@@ -28,8 +29,8 @@ def test():
     given_command = [0.9, 0.0, 0.0]
 
     env = Go1MujocoEnv(
-        prj_path="/home/kdyun/Desktop/RL_DEMO",
-        given_command=given_command,  # Use fixed command instead of random
+        prj_path=base_dir.as_posix(),
+        # given_command=given_command,  # Use fixed command instead of random
         render_mode="human",
         camera_name="tracking",
         width=1920,
@@ -60,8 +61,11 @@ def test():
                 print(f"{ep_len=}  {ep_reward=}")
                 break
 
-        total_length += ep_len
-        total_reward += ep_reward
+            total_length += ep_len
+            total_reward += ep_reward
+
+            # if total_length % (5/0.02) == 0:
+            #     obs,  _ = env.reset()
 
 
 

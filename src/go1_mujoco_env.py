@@ -35,9 +35,10 @@ class Go1MujocoEnv(MujocoEnv):
         ],
     }
 
-    def __init__(self, prj_path, given_command=None, **kwargs):
+    def __init__(self, prj_path, cfg_path=None, given_command=None, **kwargs):
         model_path = Path(f"{prj_path}/unitree_go1/scene_position.xml")
-        cfg_path = Path(f"{prj_path}/src/envs.yaml")
+        if cfg_path is None: cfg_path = Path(f"{prj_path}/src/envs.yaml")
+        else: cfg_path = Path(cfg_path)
 
         with cfg_path.open("r", encoding="utf-8") as f:
             cfg = yaml.safe_load(f)
@@ -107,7 +108,8 @@ class Go1MujocoEnv(MujocoEnv):
 
         # Gait phase tracking
         self._phase = 0.0
-        self._gait_hz = 0.5  # Gait frequency (Hz)
+        self._gait_hz = cfg["gait"]["gait_hz"]  # Gait frequency (Hz)
+        self._gait_shift = np.array(cfg["gait"]["gait_shift"])
         self._phase_sin = np.zeros(2)  # [sin(phase), cos(phase)]
 
         # Foot contact phase for gait enforcement
@@ -391,11 +393,10 @@ class Go1MujocoEnv(MujocoEnv):
         # RaiSim order was: [RR, RL, FR, FL]
         # We need to map: FR(0), FL(1), RR(2), RL(3)
 
-        base_phase = np.sin(phase_val)
-        self._foot_contact_phase[0] = -base_phase     # FR
-        self._foot_contact_phase[1] = base_phase      # FL
-        self._foot_contact_phase[2] = base_phase      # RR
-        self._foot_contact_phase[3] = -base_phase     # RL
+        self._foot_contact_phase[0] = np.sin(phase_val + np.pi * self._gait_shift[0])     # FR
+        self._foot_contact_phase[1] = np.sin(phase_val + np.pi * self._gait_shift[1])      # FL
+        self._foot_contact_phase[2] = np.sin(phase_val + np.pi * self._gait_shift[2])      # RR
+        self._foot_contact_phase[3] = np.sin(phase_val + np.pi * self._gait_shift[3])     # RL
 
 
     def _sample_desired_vel(self):

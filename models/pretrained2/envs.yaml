@@ -1,0 +1,49 @@
+# Positive Rewards
+reward:
+  linear_vel_tracking: 1.5
+  angular_vel_tracking: 1.0
+  healthy: 0.00
+  base_height: 0.0
+  feet_air_time: 0.0
+# Negative Rewards (Penalty)
+cost:
+  torque: 0.001
+  vertical_vel: 0.0
+  xy_angular_vel: 0.2
+  action_rate: 0.01
+  joint_limit: 10.0
+  joint_acc: 2.5e-7
+  action_norm: 0.0  # Penalize action norm magnitude
+  joint_pos_deviation: 0.0  # Penalize joint position deviation from nominal pose
+  gait_enforcement: 0.0  # Enforce trot gait pattern
+  foot_clearance: 0.0  # Enforce foot clearance during swing phase
+# Environment
+env:
+  max_episode_length_s: 15.0
+# Curriculum
+curriculum:
+  base: 0.3
+# Command
+command:
+  tracking_velocity_sigma: 0.25
+  des_vel:
+    min: [0.2, 0.0, 0.0]
+    max: [1.0, 0.0, 0.0]
+# Gait
+gait:
+  gait_hz: 0.5
+#  gait_shift: [1.0, 0.0, 0.0, 1.0] #[RR, RL, FR, FL] shift, Trot
+  gait_shift: [1.0, 1.0, 0.0, 0.0] #[RR, RL, FR, FL] shift, Bound
+# Observation
+observation:
+  linear_velocity: 2.0
+  angular_velocity: 0.25
+  dofs_position: 1.0
+  dofs_velocity: 0.05
+# Termination
+termination:
+  z_range: [0.20, 0.55] # In m
+  pitch_range: [-15, 15] # In degree
+  roll_range: [-15, 15] # In degree
+render:
+  render_fps: 60
