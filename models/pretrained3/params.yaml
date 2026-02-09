@@ -1,6 +1,6 @@
 seed: 42
 n_envs: 12
-total_timestep: 5000000
+total_timestep: 2000000
 eval_freq: 10000
 policy:
   use_pretrained: false
