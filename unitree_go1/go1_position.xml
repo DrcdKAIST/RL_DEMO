@@ -53,7 +53,7 @@
           <geom size="0.015" fromto="-0.02 0 -0.16 0 0 -0.2"/>
         </default>
         <default class="calf1">
-          <geom size="0.01" fromto="0 0 0 0.02 0 -0.13"/>
+          <geom size="0.01" fromto="0 0 -0.05 0.02 0 -0.13"/>
         </default>
         <default class="calf2">
           <geom size="0.01" fromto="0.02 0 -0.13 0 0 -0.2"/>

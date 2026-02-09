@@ -84,6 +84,7 @@ class Go1MujocoEnv(MujocoEnv):
         self.termination = TerminationChecker(cfg=cfg["termination"])
 
         self._cfrc_ext_feet_indices = [4, 7, 10, 13]  # 4:FR, 7:FL, 10:RR, 13:RL
+        self._cfrc_ext_calf_indices = [3, 6, 9, 12]  # 4:FR, 7:FL, 10:RR, 13:RL
         self._cfrc_ext_contact_indices = [2, 3, 5, 6, 8, 9, 11, 12]
 
         # Non-penalized degrees of freedom range of the control joints
@@ -200,7 +201,7 @@ class Go1MujocoEnv(MujocoEnv):
 
     @property
     def is_healthy(self):
-        return self.termination.is_healthy(self.state_vector())
+        return self.termination.is_healthy(self.state_vector(), self.calf_contact_forces())
 
     @property
     def projected_gravity(self):
@@ -220,6 +221,10 @@ class Go1MujocoEnv(MujocoEnv):
     def feet_contact_forces(self):
         feet_contact_forces = self.data.cfrc_ext[self._cfrc_ext_feet_indices]
         return np.linalg.norm(feet_contact_forces, axis=1)
+
+    def calf_contact_forces(self):
+        calf_contact_forces = self.data.cfrc_ext[self._cfrc_ext_calf_indices, :3]
+        return np.linalg.norm(calf_contact_forces, axis=1)
 
     @property
     def feet_positions_z(self):

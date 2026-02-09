@@ -6,11 +6,11 @@
 
 ## Basic RL + Training pipelines
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]
-(https://colab.research.google.com/github/DrcdKAIST/RL_DEMO/blob/master/notebooks/0.quadruped_locomotion_basic.ipynb)
+(https://colab.research.google.com/github/DrcdKAIST/RL_DEMO/blob/main/notebooks/0.quadruped_locomotion_basic.ipynb)
 
 ## Reward Ablation for Quadruped Locomotion
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]
-(https://colab.research.google.com/github/DrcdKAIST/RL_DEMO/blob/master/notebooks/1.quadruped_locomotion_reward_ablation.ipynb)
+(https://colab.research.google.com/github/DrcdKAIST/RL_DEMO/blob/main/notebooks/1.quadruped_locomotion_reward_ablation.ipynb)
 
 
 ---

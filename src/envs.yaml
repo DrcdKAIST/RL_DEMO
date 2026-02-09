@@ -13,10 +13,10 @@ cost:
   action_rate: 0.01
   joint_limit: 10.0
   joint_acc: 2.5e-7
-  action_norm: 0.005  # Penalize action norm magnitude
-  joint_pos_deviation: 0.05  # Penalize joint position deviation from nominal pose
-  gait_enforcement: 0.05  # Enforce trot gait pattern
-  foot_clearance: 50  # Enforce foot clearance during swing phase
+  action_norm: 0.0  # Penalize action norm magnitude
+  joint_pos_deviation: 0.0  # Penalize joint position deviation from nominal pose
+  gait_enforcement: 0.0  # Enforce trot gait pattern
+  foot_clearance: 0.0  # Enforce foot clearance during swing phase
 # Environment
 env:
   max_episode_length_s: 15.0
@@ -32,8 +32,8 @@ command:
 # Gait
 gait:
   gait_hz: 0.5
-#  gait_shift: [1.0, 0.0, 0.0, 1.0] #[RR, RL, FR, FL] shift, Trot
-  gait_shift: [1.0, 1.0, 0.0, 0.0] #[RR, RL, FR, FL] shift, Bound
+  gait_shift: [1.0, 0.0, 0.0, 1.0] #[RR, RL, FR, FL] shift, Trot
+#  gait_shift: [1.0, 1.0, 0.0, 0.0] #[RR, RL, FR, FL] shift, Bound
 # Observation
 observation:
   linear_velocity: 2.0
@@ -45,5 +45,6 @@ termination:
   z_range: [0.20, 0.55] # In m
   pitch_range: [-15, 15] # In degree
   roll_range: [-15, 15] # In degree
+  allow_calf_contact: false
 render:
   render_fps: 60
